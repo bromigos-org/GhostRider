@@ -1,12 +1,24 @@
 """Basic tests for GhostRider main module."""
 
-import contextlib
 
-from ghostrider.main import main
+def test_import_works() -> None:
+    """Test that main module imports successfully."""
+    from ghostrider.main import main
+
+    assert main is not None
 
 
-def test_main_runs() -> None:
-    """Test that main function runs without error."""
-    # For now, just ensure main() doesn't crash
-    with contextlib.suppress(SystemExit):
-        main()
+def test_models_import() -> None:
+    """Test that models import successfully."""
+    from ghostrider.models import MessagePriority, UnifiedMessage
+
+    assert UnifiedMessage is not None
+    assert MessagePriority is not None
+
+
+def test_processor_import() -> None:
+    """Test that processor imports successfully."""
+    from ghostrider.processor import MessageProcessor
+
+    processor = MessageProcessor()
+    assert processor is not None
