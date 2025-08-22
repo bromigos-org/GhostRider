@@ -9,31 +9,22 @@ dependencies = [
     "pydantic>=2.0.0",
     "requests>=2.31.0",
     "pydantic-settings>=2.0.0",
-    "asyncio>=3.4.3",
-    "flake8-pyproject (>=1.2.3,<2.0.0)",
-    "types-requests (>=2.32.4.20250809,<3.0.0.0)",
-    "pytest (>=8.4.1,<9.0.0)",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-mock>=3.10.0",
-    "ruff>=0.1.0",
-    "mypy>=1.0.0",
-    "pre-commit>=3.0.0",
 ]
 
 [tool.poetry]
 packages = [{ include = "ghostrider", from = "src" }]
 include = ["src/ghostrider/py.typed"]
 
-
 [tool.poetry.group.dev.dependencies]
-types-requests = "^2.32.4.20250809"
+pytest = "^8.4.1"
+pytest-cov = "^4.0.0"
+pytest-asyncio = "^0.21.0"
+pytest-mock = "^3.10.0"
 ruff = "^0.12.10"
+mypy = "^1.0.0"
+pre-commit = "^3.0.0"
+types-requests = "^2.32.4.20250809"
+flake8-pyproject = "^1.2.3"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

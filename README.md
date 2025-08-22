@@ -73,7 +73,7 @@ GhostRider is a powerful tool for creating and managing a unified collection of 
 
 ### Prerequisites
 
-- Python 3.13 or higher
+- Python 3.12 or higher
 - Poetry (for dependency management)
 - TextBee account and Android device for SMS integration
 
@@ -122,13 +122,16 @@ poetry run python -m ghostrider.main
 
 🎉 **WORKING FEATURES:**
 - ✅ **SMS Integration**: Full TextBee SMS platform integration
-- ✅ **Message Processing**: Asynchronous message queue processing
+- ✅ **Message Processing**: Asynchronous message queue processing with proper shutdown handling
 - ✅ **Priority Classification**: AI-powered priority scoring with urgency levels
 - ✅ **Context Analysis**: Automatic tag extraction (financial, security, meeting, etc.)
 - ✅ **Real-time Monitoring**: Configurable polling intervals
 - ✅ **Error Handling**: Robust error handling and retry logic
+- ✅ **Development Tools**: Ruff linting, MyPy type checking, and pre-commit hooks
+- ✅ **Signal Handling**: Graceful shutdown on SIGINT/SIGTERM
 
 📱 **SMS Features:**
+
 - Receive SMS messages in real-time
 - Send SMS replies through your Android device
 - Priority scoring based on content, time, and context
@@ -138,6 +141,23 @@ poetry run python -m ghostrider.main
 ### Development
 
 ```bash
+# Install development dependencies
+poetry install --with dev
+
+# Code quality checks
+poetry run ruff check src tests          # Linting
+poetry run ruff format src tests         # Formatting
+poetry run mypy src                      # Type checking
+
+# Run all quality checks
+poetry run ruff check src tests && poetry run ruff format --check src tests && poetry run mypy src
+
+# Pre-commit hooks (one-time setup)
+poetry run pre-commit install
+
+# Run pre-commit manually
+poetry run pre-commit run --all-files
+
 # Run tests (when implemented)
 poetry run pytest
 
