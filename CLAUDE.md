@@ -145,7 +145,7 @@ poetry run ghostwriter
 ### SMS Priority Rules
 
 - **Urgent**: Keywords like 'urgent', 'emergency', 'help', 'problem'
-- **High**: Keywords like 'important', 'deadline', 'meeting', 'payment' 
+- **High**: Keywords like 'important', 'deadline', 'meeting', 'payment'
 - **Medium**: Default priority for regular messages
 - **Low**: Keywords like 'fyi', 'newsletter', 'update'
 

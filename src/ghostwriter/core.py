@@ -3,7 +3,7 @@
 import asyncio
 from typing import Any
 
-from .config import GhostRiderConfig
+from .config import GhostWriterConfig
 from .models import MessageBatch
 from .platforms.discord import DiscordPlatform
 from .platforms.sms import TextBeeConfig, TextBeeSMSPlatform
@@ -13,7 +13,7 @@ from .processor import MessageProcessor
 class GhostRiderApp:
     """Main GhostRider application."""
 
-    def __init__(self, config: GhostRiderConfig):
+    def __init__(self, config: GhostWriterConfig):
         """Initialize GhostRider application."""
         self.config = config
         self.platforms: dict[str, Any] = {}

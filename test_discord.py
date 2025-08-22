@@ -2,21 +2,21 @@
 """Test script for Discord OAuth integration."""
 
 import asyncio
-import os
 from pathlib import Path
 
 from src.ghostwriter.config import load_config
+from src.ghostwriter.models import UnifiedMessage
 from src.ghostwriter.platforms.discord import DiscordPlatform
 
 
-async def test_discord_oauth():
+async def test_discord_oauth() -> None:
     """Test Discord OAuth flow."""
     print("🧪 Testing Discord OAuth Integration")
     print("=" * 50)
 
     # Load configuration
     config = load_config()
-    
+
     if not config.discord.enabled:
         print("❌ Discord not enabled in configuration")
         print("Please set DISCORD__ENABLED=true in your .env file")
@@ -46,7 +46,7 @@ async def test_discord_oauth():
 
         # Get authorization code from user
         auth_code = input("Enter authorization code: ").strip()
-        
+
         if not auth_code:
             print("❌ No authorization code provided")
             return
@@ -68,11 +68,7 @@ async def test_discord_oauth():
         if channels:
             first_channel = channels[0]
             print(f"🔄 Fetching messages from channel {first_channel.channel_id}...")
-            messages = await discord.fetch_channel_messages(
-                first_channel.channel_id, 
-                user_id, 
-                limit=5
-            )
+            messages = await discord.fetch_channel_messages(first_channel.channel_id, user_id, limit=5)
             print(f"✅ Fetched {len(messages)} messages")
 
             for i, msg in enumerate(messages):
@@ -80,7 +76,7 @@ async def test_discord_oauth():
 
         # Test unified message conversion
         print("🔄 Testing unified message conversion...")
-        unified_messages = await discord.receive_messages()
+        unified_messages: list[UnifiedMessage] = await discord.receive_messages()
         print(f"✅ Converted {len(unified_messages)} messages to unified format")
 
         print("\n🎉 Discord integration test completed successfully!")
@@ -88,6 +84,7 @@ async def test_discord_oauth():
     except Exception as e:
         print(f"❌ Test failed: {e}")
         import traceback
+
         traceback.print_exc()
 
     finally:
@@ -102,6 +99,7 @@ if __name__ == "__main__":
 
     # Load environment variables
     from dotenv import load_dotenv
+
     load_dotenv()
 
     # Run test

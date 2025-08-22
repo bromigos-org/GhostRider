@@ -2,17 +2,15 @@
 """Test script for Discord OAuth integration with callback server."""
 
 import asyncio
-import os
-import threading
 import time
 import webbrowser
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
 from aiohttp import web
 from aiohttp.web import Application, Request, Response
 
 from src.ghostwriter.config import load_config
+from src.ghostwriter.models import UnifiedMessage
 from src.ghostwriter.platforms.discord import DiscordPlatform
 
 
@@ -30,14 +28,15 @@ class OAuthCallbackServer:
     async def handle_callback(self, request: Request) -> Response:
         """Handle OAuth callback and extract authorization code."""
         query_params = dict(request.query)
-        
+
         if "code" in query_params:
             self.auth_code = query_params["code"]
-            print(f"✅ Received authorization code: {self.auth_code[:20]}...")
+            if self.auth_code:
+                print(f"✅ Received authorization code: {self.auth_code[:20]}...")
             return Response(
                 text="<h1>✅ Authorization Success!</h1>"
-                     "<p>You can close this window and return to the terminal.</p>",
-                content_type="text/html"
+                "<p>You can close this window and return to the terminal.</p>",
+                content_type="text/html",
             )
         elif "error" in query_params:
             error = query_params.get("error", "unknown")
@@ -45,18 +44,17 @@ class OAuthCallbackServer:
             print(f"❌ OAuth error: {error} - {error_description}")
             return Response(
                 text=f"<h1>❌ Authorization Error</h1>"
-                     f"<p>Error: {error}</p>"
-                     f"<p>Description: {error_description}</p>",
-                content_type="text/html"
+                f"<p>Error: {error}</p>"
+                f"<p>Description: {error_description}</p>",
+                content_type="text/html",
             )
         else:
             return Response(
-                text="<h1>❓ Invalid callback</h1>"
-                     "<p>No authorization code or error received.</p>",
-                content_type="text/html"
+                text="<h1>❓ Invalid callback</h1>" "<p>No authorization code or error received.</p>",
+                content_type="text/html",
             )
 
-    async def start(self):
+    async def start(self) -> None:
         """Start the callback server."""
         runner = web.AppRunner(self.app)
         await runner.setup()
@@ -72,14 +70,14 @@ class OAuthCallbackServer:
         return self.auth_code
 
 
-async def test_discord_oauth_with_callback():
+async def test_discord_oauth_with_callback() -> None:
     """Test Discord OAuth flow with automatic callback handling."""
     print("🧪 Testing Discord OAuth Integration with Callback Server")
     print("=" * 60)
 
     # Load configuration
     config = load_config()
-    
+
     if not config.discord.enabled:
         print("❌ Discord not enabled in configuration")
         print("Please set DISCORD__ENABLED=true in your .env file")
@@ -101,8 +99,8 @@ async def test_discord_oauth_with_callback():
     try:
         # Generate OAuth URL using the platform's method with correct scopes
         oauth_url = discord.generate_oauth_url()
-        
-        print(f"🔗 Opening OAuth URL in browser...")
+
+        print("🔗 Opening OAuth URL in browser...")
         print(f"URL: {oauth_url}")
         print()
         print("Steps:")
@@ -118,7 +116,7 @@ async def test_discord_oauth_with_callback():
         # Wait for callback
         print("⏳ Waiting for authorization (up to 2 minutes)...")
         auth_code = await callback_server.wait_for_callback(timeout=120)
-        
+
         if not auth_code:
             print("❌ No authorization code received within timeout")
             return
@@ -134,13 +132,10 @@ async def test_discord_oauth_with_callback():
         print(f"✅ Found {len(channels)} channels/DMs")
 
         for i, channel in enumerate(channels[:5]):  # Show first 5
-            channel_type_name = {
-                1: "DM",
-                3: "Group DM",
-                0: "Text Channel",
-                2: "Voice Channel"
-            }.get(channel.channel_type, f"Type {channel.channel_type}")
-            
+            channel_type_name = {1: "DM", 3: "Group DM", 0: "Text Channel", 2: "Voice Channel"}.get(
+                channel.channel_type, f"Type {channel.channel_type}"
+            )
+
             print(f"  {i+1}. Channel ID: {channel.channel_id}, Type: {channel_type_name}")
             if channel.recipient_ids:
                 print(f"      Recipients: {len(channel.recipient_ids)} users")
@@ -149,24 +144,22 @@ async def test_discord_oauth_with_callback():
         if channels:
             first_channel = channels[0]
             print(f"🔄 Fetching messages from channel {first_channel.channel_id}...")
-            messages = await discord.fetch_channel_messages(
-                first_channel.channel_id, 
-                user_id, 
-                limit=5
-            )
+            messages = await discord.fetch_channel_messages(first_channel.channel_id, user_id, limit=5)
             print(f"✅ Fetched {len(messages)} messages")
 
-            for i, msg in enumerate(messages):
-                content_preview = msg.content[:50] + "..." if len(msg.content) > 50 else msg.content
-                print(f"  {i+1}. {msg.author_name}: {content_preview}")
+            for i, discord_msg in enumerate(messages):
+                content_preview = (
+                    discord_msg.content[:50] + "..." if len(discord_msg.content) > 50 else discord_msg.content
+                )
+                print(f"  {i+1}. {discord_msg.author_name}: {content_preview}")
 
         # Test unified message conversion
         print("🔄 Testing unified message conversion...")
-        unified_messages = await discord.receive_messages()
+        unified_messages: list[UnifiedMessage] = await discord.receive_messages()
         print(f"✅ Converted {len(unified_messages)} messages to unified format")
 
-        for i, msg in enumerate(unified_messages[:3]):  # Show first 3
-            print(f"  {i+1}. [{msg.platform.value}] {msg.author.name}: {msg.content[:40]}...")
+        for i, unified_msg in enumerate(unified_messages[:3]):  # Show first 3
+            print(f"  {i+1}. [{unified_msg.platform.value}] {unified_msg.author.name}: {unified_msg.content[:40]}...")
 
         print("\n🎉 Discord integration test completed successfully!")
         print(f"📊 Summary: {len(channels)} channels, {len(unified_messages)} messages processed")
@@ -174,6 +167,7 @@ async def test_discord_oauth_with_callback():
     except Exception as e:
         print(f"❌ Test failed: {e}")
         import traceback
+
         traceback.print_exc()
 
     finally:
@@ -189,6 +183,7 @@ if __name__ == "__main__":
 
     # Load environment variables
     from dotenv import load_dotenv
+
     load_dotenv()
 
     # Run test
