@@ -1,1 +1,0 @@
-"""Message platform integrations."""

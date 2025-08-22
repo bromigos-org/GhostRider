@@ -20,12 +20,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GhostRider is a unified messaging application manager that processes messages across multiple platforms (Slack, Gmail, Outlook, Discord, Telegram, SMS). The system generates intelligent summaries, contextual responses, and automated actions based on message priority and context.
+GhostWriter is a unified messaging application manager that processes messages across multiple platforms (Slack, Gmail, Outlook, Discord, Telegram, SMS). The system generates intelligent summaries, contextual responses, and automated actions based on message priority and context.
 
 ## Architecture
 
-- **Core Module**: `src/ghostrider/` contains the main application logic
-- **Entry Point**: `src/ghostrider/main.py:main()` - currently a placeholder that prints startup message
+- **Core Module**: `src/ghostwriter/` contains the main application logic
+- **Entry Point**: `src/ghostwriter/main.py:main()` - currently a placeholder that prints startup message
 - **Package Structure**: Standard Python package with Poetry for dependency management
 
 ## Development Commands
@@ -44,10 +44,10 @@ poetry shell
 
 ```bash
 # Run directly with Poetry
-poetry run ghostrider
+poetry run ghostwriter
 
 # Or run the module
-poetry run python -m ghostrider.main
+poetry run python -m ghostwriter.main
 ```
 
 ### Testing
@@ -57,7 +57,7 @@ poetry run python -m ghostrider.main
 poetry run pytest
 
 # Run tests with coverage (when implemented)
-poetry run pytest --cov=ghostrider
+poetry run pytest --cov=ghostwriter
 ```
 
 ### Development Tools
@@ -91,7 +91,7 @@ poetry run pre-commit run --all-files
 
 ### TextBee Setup for Google Pixel
 
-GhostRider integrates with your Google Pixel phone via TextBee SMS gateway for real-time SMS processing.
+GhostWriter integrates with your Google Pixel phone via TextBee SMS gateway for real-time SMS processing.
 
 #### Step 1: TextBee Account Setup
 
@@ -111,7 +111,7 @@ GhostRider integrates with your Google Pixel phone via TextBee SMS gateway for r
 2. Open TextBee app on Pixel
 3. Enter API key manually
 
-#### Step 3: GhostRider Configuration
+#### Step 3: GhostWriter Configuration
 
 Create a `.env` file in the project root:
 
@@ -130,8 +130,8 @@ SMS__POLLING_INTERVAL=10
 # Install with SMS dependencies
 poetry install
 
-# Run GhostRider
-poetry run ghostrider
+# Run GhostWriter
+poetry run ghostwriter
 ```
 
 ### SMS Features
@@ -168,7 +168,7 @@ Additional factors:
 
 **Rate Limiting:**
 - TextBee has rate limits for API calls
-- GhostRider respects polling intervals to avoid limits
+- GhostWriter respects polling intervals to avoid limits
 - Consider upgrading to TextBee Pro for higher limits
 
 ## Key Implementation Areas

@@ -2,14 +2,14 @@
 
 from datetime import datetime
 
-from ghostrider.models import (
+from ghostwriter.models import (
     MessageAuthor,
     MessageMetadata,
     MessagePlatform,
     MessagePriority,
     UnifiedMessage,
 )
-from ghostrider.processor import MessageProcessor
+from ghostwriter.processor import MessageProcessor
 
 
 def test_processor_creation() -> None:

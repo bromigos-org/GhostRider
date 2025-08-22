@@ -1,4 +1,4 @@
-"""Configuration management for GhostRider."""
+"""Configuration management for GhostWriter."""
 
 import os
 
@@ -26,8 +26,16 @@ class DiscordConfig(BaseModel):
     """Discord platform configuration."""
 
     enabled: bool = False
-    bot_token: str | None = None
-    guild_id: str | None = None
+    # OAuth 2.0 configuration
+    client_id: str | None = None
+    client_secret: str | None = None
+    redirect_uri: str | None = None
+    # Database configuration
+    db_path: str = "ghostwriter.db"
+    encryption_key: str | None = None
+    # API configuration
+    api_base_url: str = "https://discord.com/api/v10"
+    max_messages_per_channel: int = 100
 
 
 class GmailConfig(BaseModel):
@@ -46,8 +54,8 @@ class ProcessingConfig(BaseModel):
     max_retries: int = 3
 
 
-class GhostRiderConfig(BaseModel):
-    """Main GhostRider configuration."""
+class GhostWriterConfig(BaseModel):
+    """Main GhostWriter configuration."""
 
     # General settings
     debug: bool = False
@@ -63,7 +71,7 @@ class GhostRiderConfig(BaseModel):
     processing: ProcessingConfig = ProcessingConfig()
 
 
-def load_config() -> GhostRiderConfig:
+def load_config() -> GhostWriterConfig:
     """Load configuration from environment and .env file."""
 
     # Load environment variables from .env file if it exists
@@ -93,8 +101,13 @@ def load_config() -> GhostRiderConfig:
     # Load Discord configuration
     discord_config = DiscordConfig(
         enabled=os.getenv("DISCORD__ENABLED", "false").lower() == "true",
-        bot_token=os.getenv("DISCORD__BOT_TOKEN"),
-        guild_id=os.getenv("DISCORD__GUILD_ID"),
+        client_id=os.getenv("DISCORD__CLIENT_ID"),
+        client_secret=os.getenv("DISCORD__CLIENT_SECRET"),
+        redirect_uri=os.getenv("DISCORD__REDIRECT_URI", "http://localhost:8080/callback"),
+        db_path=os.getenv("DISCORD__DB_PATH", "ghostwriter.db"),
+        encryption_key=os.getenv("DISCORD__ENCRYPTION_KEY"),
+        api_base_url=os.getenv("DISCORD__API_BASE_URL", "https://discord.com/api/v10"),
+        max_messages_per_channel=int(os.getenv("DISCORD__MAX_MESSAGES_PER_CHANNEL", "100")),
     )
 
     # Load Gmail configuration
@@ -112,7 +125,7 @@ def load_config() -> GhostRiderConfig:
     )
 
     # Create main configuration manually to avoid BaseSettings auto-loading conflicts
-    config = GhostRiderConfig(
+    config = GhostWriterConfig(
         debug=os.getenv("DEBUG", "false").lower() == "true",
         log_level=os.getenv("LOG_LEVEL", "INFO"),
         sms=sms_config,

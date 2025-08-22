@@ -5,9 +5,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from ghostrider.config import GhostRiderConfig, SMSConfig
-from ghostrider.core import GhostRiderApp
-from ghostrider.models import MessageBatch, MessagePlatform
+from ghostwriter.config import GhostRiderConfig, SMSConfig
+from ghostwriter.core import GhostRiderApp
+from ghostwriter.models import MessageBatch, MessagePlatform
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ class TestGhostRiderIntegration:
     """Test GhostRider application integration."""
 
     @pytest.mark.asyncio
-    @patch("ghostrider.platforms.sms.requests.Session.get")
+    @patch("ghostwriter.platforms.sms.requests.Session.get")
     async def test_app_start_sms_enabled(self, mock_get: Mock, ghost_rider_app: GhostRiderApp) -> None:
         """Test app startup with SMS platform enabled."""
         # Mock TextBee API connection
@@ -67,7 +67,7 @@ class TestGhostRiderIntegration:
         await app.shutdown()
 
     @pytest.mark.asyncio
-    @patch("ghostrider.platforms.sms.requests.Session.get")
+    @patch("ghostwriter.platforms.sms.requests.Session.get")
     async def test_sms_connection_failure(self, mock_get: Mock, ghost_rider_app: GhostRiderApp) -> None:
         """Test handling of SMS connection failure."""
         # Mock failed API connection
@@ -84,7 +84,7 @@ class TestGhostRiderIntegration:
         await ghost_rider_app.shutdown()
 
     @pytest.mark.asyncio
-    @patch("ghostrider.platforms.sms.requests.Session.get")
+    @patch("ghostwriter.platforms.sms.requests.Session.get")
     async def test_message_processing_flow(self, mock_get: Mock, ghost_rider_app: GhostRiderApp) -> None:
         """Test complete message processing flow."""
         # Mock TextBee API responses
@@ -138,8 +138,8 @@ class TestGhostRiderIntegration:
         await ghost_rider_app.shutdown()
 
     @pytest.mark.asyncio
-    @patch("ghostrider.platforms.sms.requests.Session.post")
-    @patch("ghostrider.platforms.sms.requests.Session.get")
+    @patch("ghostwriter.platforms.sms.requests.Session.post")
+    @patch("ghostwriter.platforms.sms.requests.Session.get")
     async def test_sms_sending(self, mock_get: Mock, mock_post: Mock, ghost_rider_app: GhostRiderApp) -> None:
         """Test SMS sending functionality."""
         # Mock connection
@@ -167,7 +167,7 @@ class TestGhostRiderIntegration:
     @pytest.mark.asyncio
     async def test_app_shutdown_graceful(self, ghost_rider_app: GhostRiderApp) -> None:
         """Test graceful application shutdown."""
-        with patch("ghostrider.platforms.sms.requests.Session.get") as mock_get:
+        with patch("ghostwriter.platforms.sms.requests.Session.get") as mock_get:
             # Mock connection
             mock_response = Mock()
             mock_response.raise_for_status.return_value = None
@@ -184,7 +184,7 @@ class TestGhostRiderIntegration:
             assert ghost_rider_app.running is False
 
     @pytest.mark.asyncio
-    @patch("ghostrider.platforms.sms.requests.Session.get")
+    @patch("ghostwriter.platforms.sms.requests.Session.get")
     async def test_message_deduplication(self, mock_get: Mock, ghost_rider_app: GhostRiderApp) -> None:
         """Test that duplicate messages are not processed twice."""
         # Mock connection and messages

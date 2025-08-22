@@ -6,8 +6,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from ghostrider.models import MessagePlatform, MessageType
-from ghostrider.platforms.sms import TextBeeConfig, TextBeeSMSPlatform
+from ghostwriter.models import MessagePlatform, MessageType
+from ghostwriter.platforms.sms import TextBeeConfig, TextBeeSMSPlatform
 
 
 @pytest.fixture

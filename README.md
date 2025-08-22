@@ -1,6 +1,6 @@
-# GhostRider
+# GhostWriter
 
-GhostRider is a powerful tool for creating and managing a unified collection of messaging applications. It provides a set of automated action items, based on priority and context, across multiple communication platforms.
+GhostWriter is a powerful tool for creating and managing a unified collection of messaging applications. It provides a set of automated action items, based on priority and context, across multiple communication platforms.
 
 ## 🚀 Supported Applications
 
@@ -81,8 +81,8 @@ GhostRider is a powerful tool for creating and managing a unified collection of 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/bromigos-org/GhostRider.git
-   cd GhostRider
+   git clone https://github.com/bromigos-org/GhostWriter.git
+   cd GhostWriter
    ```
 
 2. Install dependencies:
@@ -106,16 +106,16 @@ GhostRider is a powerful tool for creating and managing a unified collection of 
 1. **Create TextBee Account**: Sign up at [textbee.dev](https://textbee.dev)
 2. **Install Android App**: Download from [dl.textbee.dev](https://dl.textbee.dev)
 3. **Connect Device**: Use QR code or manual API key entry
-4. **Configure GhostRider**: Add your API key and device ID to `.env`
+4. **Configure GhostWriter**: Add your API key and device ID to `.env`
 
-### Running GhostRider
+### Running GhostWriter
 
 ```bash
 # Run the application
-poetry run ghostrider
+poetry run ghostwriter
 
 # Or run directly
-poetry run python -m ghostrider.main
+poetry run python -m ghostwriter.main
 ```
 
 ### Current Implementation Status
@@ -178,4 +178,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-**GhostRider** - Unifying your messaging experience across platforms.
+**GhostWriter** - Unifying your messaging experience across platforms.

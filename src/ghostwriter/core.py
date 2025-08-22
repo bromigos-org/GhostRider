@@ -5,6 +5,7 @@ from typing import Any
 
 from .config import GhostRiderConfig
 from .models import MessageBatch
+from .platforms.discord import DiscordPlatform
 from .platforms.sms import TextBeeConfig, TextBeeSMSPlatform
 from .processor import MessageProcessor
 
@@ -30,7 +31,13 @@ class GhostRiderApp:
         else:
             print("⚠️  SMS platform disabled (missing configuration)")
 
-        # TODO: Initialize other platforms (Slack, Discord, Gmail)
+        # Initialize Discord platform if enabled
+        if self.config.discord.enabled:
+            await self._setup_discord_platform()
+        else:
+            print("⚠️  Discord platform disabled (missing configuration)")
+
+        # TODO: Initialize other platforms (Slack, Gmail)
 
         # Start message processing
         self.running = True
@@ -59,6 +66,24 @@ class GhostRiderApp:
 
         except Exception as e:
             print(f"❌ Failed to initialize SMS platform: {e}")
+
+    async def _setup_discord_platform(self) -> None:
+        """Set up Discord OAuth platform."""
+        try:
+            discord_platform = DiscordPlatform(self.config.discord)
+            await discord_platform.connect()
+
+            # Check if user needs to authenticate
+            if not self.config.discord.client_id:
+                print("⚠️  Discord client_id not configured. Please set DISCORD__CLIENT_ID in .env")
+                return
+
+            self.platforms["discord"] = discord_platform
+            print("💬 Discord platform initialized (OAuth)")
+            print("🔗 To authenticate, use the OAuth URL from the Discord service")
+
+        except Exception as e:
+            print(f"❌ Failed to initialize Discord platform: {e}")
 
     async def _monitor_platform(self, platform_name: str, platform: Any) -> None:
         """Monitor a platform for new messages."""

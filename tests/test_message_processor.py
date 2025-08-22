@@ -4,7 +4,7 @@ from datetime import datetime
 
 import pytest
 
-from ghostrider.models import (
+from ghostwriter.models import (
     MessageAuthor,
     MessageBatch,
     MessageMetadata,
@@ -14,7 +14,7 @@ from ghostrider.models import (
     SMSMetadata,
     UnifiedMessage,
 )
-from ghostrider.processor import MessageProcessor
+from ghostwriter.processor import MessageProcessor
 
 
 @pytest.fixture
