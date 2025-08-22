@@ -70,7 +70,7 @@ class GhostRiderApp:
                 messages = await platform.receive_messages()
 
                 if messages:
-                    print(f"📥 Received {len(messages)} new message(s) " f"from {platform_name}")
+                    print(f"📥 Received {len(messages)} new message(s) from {platform_name}")
 
                     # Create message batch
                     batch = MessageBatch(
@@ -112,7 +112,7 @@ class GhostRiderApp:
                         f"Tags: {', '.join(result.context_tags) if result.context_tags else 'none'}"
                     )
                 else:
-                    print(f"❌ Failed to process message " f"{result.message_id[:8]}...: {result.error}")
+                    print(f"❌ Failed to process message {result.message_id[:8]}...: {result.error}")
 
             # TODO: Implement actions based on priority
             await self._handle_processed_messages(batch, results)
@@ -132,7 +132,7 @@ class GhostRiderApp:
                 print(f"🚨 HIGH PRIORITY MESSAGE from {message.platform.value}:")
                 print(f"   From: {message.author.name}")
                 print(f"   Content: {message.content[:100]}...")
-                print(f"   Priority: {message.priority.value} " f"(score: {message.urgency_score:.2f})")
+                print(f"   Priority: {message.priority.value} (score: {message.urgency_score:.2f})")
                 if message.context_tags:
                     print(f"   Tags: {', '.join(message.context_tags)}")
                 print()
