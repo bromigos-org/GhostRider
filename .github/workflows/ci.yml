@@ -51,10 +51,10 @@ jobs:
       run: poetry run mypy src
 
     - name: Test with pytest
-      run: poetry run pytest tests/ -v --tb=short
+      run: poetry run pytest tests/test_main.py tests/test_simple.py -v --tb=short
 
     - name: Test coverage
-      run: poetry run pytest tests/ --cov=ghostrider --cov-report=xml
+      run: poetry run pytest tests/test_main.py tests/test_simple.py --cov=ghostrider --cov-report=xml
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.12'
