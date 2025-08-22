@@ -1,12 +1,12 @@
 """Basic tests for GhostRider main module."""
 
+import contextlib
+
 from ghostrider.main import main
 
 
-def test_main_runs():
+def test_main_runs() -> None:
     """Test that main function runs without error."""
     # For now, just ensure main() doesn't crash
-    try:
+    with contextlib.suppress(SystemExit):
         main()
-    except SystemExit:
-        pass  # main() might call sys.exit()

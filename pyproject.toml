@@ -4,12 +4,15 @@ version = "0.1.0"
 description = "Unified messaging application manager with intelligent processing"
 authors = [{ name = "Nick L.", email = "lesseosnick@gmail.com" }]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "pydantic>=2.0.0",
     "requests>=2.31.0",
     "pydantic-settings>=2.0.0",
     "asyncio>=3.4.3",
+    "flake8-pyproject (>=1.2.3,<2.0.0)",
+    "types-requests (>=2.32.4.20250809,<3.0.0.0)",
+    "pytest (>=8.4.1,<9.0.0)",
 ]
 
 [project.optional-dependencies]
@@ -18,16 +21,19 @@ dev = [
     "pytest-cov>=4.0.0",
     "pytest-asyncio>=0.21.0",
     "pytest-mock>=3.10.0",
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "flake8>=6.0.0",
+    "ruff>=0.1.0",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
 ]
 
 [tool.poetry]
 packages = [{ include = "ghostrider", from = "src" }]
+include = ["src/ghostrider/py.typed"]
 
+
+[tool.poetry.group.dev.dependencies]
+types-requests = "^2.32.4.20250809"
+ruff = "^0.12.10"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -36,13 +42,26 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 ghostrider = "ghostrider.main:main"
 
-[tool.black]
-line-length = 88
-target-version = ['py313']
+[tool.ruff]
+line-length = 120
+target-version = "py312"
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "PIE", # flake8-pie
+    "SIM", # flake8-simplify
+]
+ignore = ["E203"]  # whitespace before ':'
+
+[tool.ruff.lint.isort]
+known-first-party = ["ghostrider"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -52,8 +71,13 @@ python_functions = "test_*"
 addopts = "--strict-markers --disable-warnings"
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 check_untyped_defs = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "."
+exclude = ["build", "dist", "__pycache__"]
+ignore_missing_imports = false
